@@ -123,9 +123,7 @@ function renderFilterByTypeForm() {
   selectEl.append(optionEl, option1, option2, option3);
   labelEl.append(h3El);
 
-  console.log(labelEl);
-  console.log(selectEl);
-  console.log(formEl);
+  console.log("within renderFilterByTypeForm: ", formEl);
 
   return formEl;
 }
@@ -142,6 +140,8 @@ function renderFilterByCity() {
   buttonClear.innerText = "clear all";
 
   divEl.append(h3El, buttonClear);
+
+  console.log("within renderFilterByCity: ", divEl);
 
   return divEl;
 }
@@ -161,13 +161,15 @@ function renderFilterByCityForm() {
 
   formEl.append(inputCityCheckbox, inputCityLabel);
 
+  console.log("within renderFilterByCityForm :", formEl);
+
   return formEl;
 }
 
-function renderBreweriesSection() {
-  const h1TitleEl = documemt.createElement("h1");
-  h1TitleEl.innerText = "List of Breweries";
+const h1TitleEl = document.createElement("h1");
+h1TitleEl.innerText = "List of Breweries";
 
+function renderHeaderSearchBar() {
   const headerEl = document.createElement("header");
   headerEl.setAttribute("class", "search-bar");
 
@@ -190,46 +192,95 @@ function renderBreweriesSection() {
   searchFormEl.append(searchLabelEl, searchInputEl);
   headerEl.append(searchFormEl);
 
+  console.log("within renderHeaderSearchBar", headerEl);
+
   return headerEl;
 }
 
-// const articleEl = document.createElement("article")
+function renderBreweriesList() {
+  const articleEl = document.createElement("article");
 
-// const breweriesListEl = document.createElement("ul")
-// breweriesListEl.setAttribute("class", "breweries-list")
+  const breweriesListUlEl = document.createElement("ul");
+  breweriesListUlEl.setAttribute("class", "breweries-list");
 
-// const breweryLiEL = document.createElement("li")
+  const breweryLiEL = document.createElement("li");
 
-// const h2El
+  const h2El = document.createElement("h2");
+  h2El.innerText = "Snow Belt Brew";
 
-/* <h1>List of Breweries</h1>
-<header class="search-bar">
-  <form id="search-breweries-form" autocomplete="off">
-    <label for="search-breweries"><h2>Search breweries:</h2></label>
-    <input id="search-breweries" name="search-breweries" type="text" />
-  </form>
-</header>
-<article>
-  <ul class="breweries-list">
-    <li>
-      <h2>Snow Belt Brew</h2>
-      <div class="type">micro</div>
-      <section class="address">
-        <h3>Address:</h3>
-        <p>9511 Kile Rd</p>
-        <p><strong>Chardon, 44024</strong></p>
-      </section>
-      <section class="phone">
-        <h3>Phone:</h3>
-        <p>N/A</p>
-      </section>
-      <section class="link">
-        <a href="null" target="_blank">Visit Website</a>
-      </section>
-    </li>
-    // More list elements
-  </ul>
-</article> */
+  const typeDiv = document.createElement("div");
+  typeDiv.setAttribute("class", "type");
+  typeDiv.innerText = "micro";
+
+  function renderAddressSection() {
+    const addressSect = document.createElement("section");
+    addressSect.setAttribute("class", "address");
+
+    const h3El = document.createElement("h3");
+    h3El.innerText = "Address:";
+
+    const pAdd1El = document.createElement("p");
+    pAdd1El.innerHTML = "9511 Kile Rd";
+
+    const pAdd2El = document.createElement("p");
+    pAdd2El.setAttribute("class", "strong");
+    pAdd2El.innerHTML = "Chardon, 44024";
+
+    addressSect.append(h3El, pAdd1El, pAdd2El);
+
+    console.log("within renderAddressSection", addressSect);
+
+    return addressSect;
+  }
+
+  function renderPhoneSection() {
+    const phoneSectEl = document.createElement("section");
+    phoneSectEl.setAttribute("class", "phone");
+    const h3El = document.createElement("h3");
+    h3El.innerText = "phone:";
+    const pEl = document.createElement("p");
+    pEl.innerText = "N/A";
+
+    phoneSectEl.append(h3El, pEl);
+
+    console.log("within renderPhoneSection: ", phoneSectEl);
+    return phoneSectEl;
+  }
+
+  function renderLinkSection() {
+    const linkSectEl = document.createElement("section");
+    linkSectEl.setAttribute("class", "link");
+    const hrefEl = document.createElement("a");
+    hrefEl.setAttribute("href", "null");
+    hrefEl.setAttribute("target", "blank");
+    hrefEl.innerText = "Visit Website";
+
+    linkSectEl.append(hrefEl);
+
+    console.log("within renderLinkSection:", linkSectEl);
+    return linkSectEl;
+  }
+
+  const addressSection = renderAddressSection();
+  const phoneSection = renderPhoneSection();
+  const linkSection = renderLinkSection();
+
+  console.log(headerSearchbar);
+
+  breweryLiEL.append(h2El, typeDiv, addressSection, phoneSection, linkSection);
+  breweriesListUlEl.append(breweryLiEL);
+  articleEl.append(breweriesListUlEl);
+
+  mainBody.append(h1TitleEl, headerSearchbar, articleEl);
+
+  renderAddressSection();
+  renderPhoneSection();
+  renderLinkSection();
+
+  console.log("within renderBreweriesList :", articleEl);
+
+  return articleEl;
+}
 
 // calling functions
 
@@ -237,6 +288,8 @@ const filterByTypeForm = renderFilterByTypeForm();
 const filterByCity = renderFilterByCity();
 const filterByCityForm = renderFilterByCityForm();
 
-// const filterByBrewery = renderOfBreweriesSection()
+const headerSearchbar = renderHeaderSearchBar();
+
+renderBreweriesList();
 
 renderFilterSection();
