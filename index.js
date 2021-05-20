@@ -24,56 +24,74 @@
 //     - Name
 //     - City
 
+// const state = {
+//   breweries: [
+//     {
+//       address_2: null,
+//       address_3: null,
+//       brewery_type: "large",
+//       city: "San Diego",
+//       country: "United States",
+//       county_province: null,
+//       created_at: "2018-07-24T00:00:00.000Z",
+//       id: 8041,
+//       latitude: "32.714813",
+//       longitude: "-117.129593",
+//       name: "10 Barrel Brewing Co",
+//       obdb_id: "10-barrel-brewing-co-san-diego",
+//       phone: "6195782311",
+//       postal_code: "92101-6618",
+//       state: "California",
+//       street: "1501 E St",
+//       updated_at: "2018-08-23T00:00:00.000Z",
+//       website_url: "http://10barrel.com",
+//     },
+//   ],
+
 const state = {
-  breweries: [
-    {
-      address_2: null,
-      address_3: null,
-      brewery_type: "large",
-      city: "San Diego",
-      country: "United States",
-      county_province: null,
-      created_at: "2018-07-24T00:00:00.000Z",
-      id: 8041,
-      latitude: "32.714813",
-      longitude: "-117.129593",
-      name: "10 Barrel Brewing Co",
-      obdb_id: "10-barrel-brewing-co-san-diego",
-      phone: "6195782311",
-      postal_code: "92101-6618",
-      state: "California",
-      street: "1501 E St",
-      updated_at: "2018-08-23T00:00:00.000Z",
-      website_url: "http://10barrel.com",
-    },
-    {
-      address_2: null,
-      address_3: null,
-      brewery_type: "large",
-      city: "San Diego",
-      country: "United States",
-      county_province: null,
-      created_at: "2018-07-24T00:00:00.000Z",
-      id: 8041,
-      latitude: "32.714813",
-      longitude: "-117.129593",
-      name: "10 Barrel Brewing Co",
-      obdb_id: "10-barrel-brewing-co-san-diego",
-      phone: "6195782311",
-      postal_code: "92101-6618",
-      state: "California",
-      street: "1501 E St",
-      updated_at: "2018-08-23T00:00:00.000Z",
-      website_url: "http://10barrel.com",
-    },
-  ],
-
-  // add in later on
-
-  // filter: [{
-
-  // }]
+  breweries: [],
 };
+
+function getBreweriesByState(state) {
+  return fetch(
+    `https://api.openbrewerydb.org/breweries?by_state=${state}&per_page=50`
+  )
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (finalArray) {
+      console.log("second dot then resonse: ", finalArray);
+      return finalArray;
+    });
+}
+
+function listenToSelectStateFrom() {
+  const formEl = document.querySelector("#select-state-form");
+  formEl.addEventListener("submit", function (event) {
+    event.preventDefault();
+    console.log("you submitted a state!");
+
+    const USState = formEl["select-state"].value;
+    console.log("USState", USState);
+
+    getBreweriesByState(USState).then(function (breweriesFromServer) {
+      const filteredBreweries = breweriesFromServer.filter(function (brewery) {
+        return (
+          brewery.brewery_type === "brewpub" ||
+          brewery.brewery_type === "micro" ||
+          brewery.brewery_type === "regional"
+        );
+      });
+      console.log(filteredBreweries);
+
+      const slicedBreweries = filteredBreweries.slice(0, 10);
+      state.breweries = slicedBreweries;
+      console.log(slicedBreweries);
+    });
+  });
+}
+
+/// we start again here making the form dynamic and rendering brewery list on the page
 
 const mainBody = document.querySelector(".main-body");
 
@@ -123,7 +141,7 @@ function renderFilterByTypeForm() {
   selectEl.append(optionEl, option1, option2, option3);
   labelEl.append(h3El);
 
-  console.log("within renderFilterByTypeForm: ", formEl);
+  // console.log("within renderFilterByTypeForm: ", formEl);
 
   return formEl;
 }
@@ -141,7 +159,7 @@ function renderFilterByCity() {
 
   divEl.append(h3El, buttonClear);
 
-  console.log("within renderFilterByCity: ", divEl);
+  // console.log("within renderFilterByCity: ", divEl);
 
   return divEl;
 }
@@ -161,7 +179,7 @@ function renderFilterByCityForm() {
 
   formEl.append(inputCityCheckbox, inputCityLabel);
 
-  console.log("within renderFilterByCityForm :", formEl);
+  // console.log("within renderFilterByCityForm :", formEl);
 
   return formEl;
 }
@@ -192,7 +210,7 @@ function renderHeaderSearchBar() {
   searchFormEl.append(searchLabelEl, searchInputEl);
   headerEl.append(searchFormEl);
 
-  console.log("within renderHeaderSearchBar", headerEl);
+  // console.log("within renderHeaderSearchBar", headerEl);
 
   return headerEl;
 }
@@ -223,12 +241,12 @@ function renderBreweriesList() {
     pAdd1El.innerHTML = "9511 Kile Rd";
 
     const pAdd2El = document.createElement("p");
-    pAdd2El.setAttribute("class", "strong");
+    // pAdd2El.setAttribute("class", "strong");
     pAdd2El.innerHTML = "Chardon, 44024";
 
     addressSect.append(h3El, pAdd1El, pAdd2El);
 
-    console.log("within renderAddressSection", addressSect);
+    // console.log("within renderAddressSection", addressSect);
 
     return addressSect;
   }
@@ -243,7 +261,7 @@ function renderBreweriesList() {
 
     phoneSectEl.append(h3El, pEl);
 
-    console.log("within renderPhoneSection: ", phoneSectEl);
+    // console.log("within renderPhoneSection: ", phoneSectEl);
     return phoneSectEl;
   }
 
@@ -257,7 +275,7 @@ function renderBreweriesList() {
 
     linkSectEl.append(hrefEl);
 
-    console.log("within renderLinkSection:", linkSectEl);
+    // console.log("within renderLinkSection:", linkSectEl);
     return linkSectEl;
   }
 
@@ -265,7 +283,7 @@ function renderBreweriesList() {
   const phoneSection = renderPhoneSection();
   const linkSection = renderLinkSection();
 
-  console.log(headerSearchbar);
+  // console.log(headerSearchbar);
 
   breweryLiEL.append(h2El, typeDiv, addressSection, phoneSection, linkSection);
   breweriesListUlEl.append(breweryLiEL);
@@ -277,7 +295,7 @@ function renderBreweriesList() {
   renderPhoneSection();
   renderLinkSection();
 
-  console.log("within renderBreweriesList :", articleEl);
+  // console.log("within renderBreweriesList :", articleEl);
 
   return articleEl;
 }
@@ -293,3 +311,5 @@ const headerSearchbar = renderHeaderSearchBar();
 renderBreweriesList();
 
 renderFilterSection();
+
+listenToSelectStateFrom();
