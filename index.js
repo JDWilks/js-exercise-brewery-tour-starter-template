@@ -1,3 +1,29 @@
+// - Think about which request type to use
+// - Create a state object ✅
+// - Create action functions that update state
+// - Create render functions that read from state
+// - Create a fetch function to get data
+
+// - A user can enter a US state and view a list of breweries in that state
+//     - The list has a maximum of 10 breweries in it
+//     - The list has three types of breweries that offer brewery tours:
+//         - Micro
+//         - Regional
+//         - Brewpub
+//     - Do not show the other types of breweries
+// - From the list of breweries, a user can view the following details about each brewery:
+//     - Name
+//     - Type of brewery
+//     - Address
+//     - Phone Number
+// - From the list of breweries, a user can visit the website of a brewery
+// - From the 'filter by type of brewery' section, a user can filter by type of brewery
+// - From the 'filter by city' section, a user can filter by city, the location of the brewery
+// - From the 'filter by city' section, a user can clear all filters
+// - From the 'search' section, a user can search for breweries by:
+//     - Name
+//     - City
+
 const state = {
   breweries: [
     {
@@ -49,35 +75,7 @@ const state = {
   // }]
 };
 
-// - Think about which request type to use
-// - Create a state object ✅
-// - Create action functions that update state
-// - Create render functions that read from state
-// - Create a fetch function to get data
-
-// - A user can enter a US state and view a list of breweries in that state
-//     - The list has a maximum of 10 breweries in it
-//     - The list has three types of breweries that offer brewery tours:
-//         - Micro
-//         - Regional
-//         - Brewpub
-//     - Do not show the other types of breweries
-// - From the list of breweries, a user can view the following details about each brewery:
-//     - Name
-//     - Type of brewery
-//     - Address
-//     - Phone Number
-// - From the list of breweries, a user can visit the website of a brewery
-// - From the 'filter by type of brewery' section, a user can filter by type of brewery
-// - From the 'filter by city' section, a user can filter by city, the location of the brewery
-// - From the 'filter by city' section, a user can clear all filters
-// - From the 'search' section, a user can search for breweries by:
-//     - Name
-//     - City
-
 const mainBody = document.querySelector(".main-body");
-
-/// function making main
 
 function renderFilterSection() {
   const asideEl = document.createElement("aside");
@@ -166,32 +164,34 @@ function renderFilterByCityForm() {
   return formEl;
 }
 
-const filterByTypeForm = renderFilterByTypeForm();
-const filterByCity = renderFilterByCity();
-const filterByCityForm = renderFilterByCityForm();
+function renderBreweriesSection() {
+  const h1TitleEl = documemt.createElement("h1");
+  h1TitleEl.innerText = "List of Breweries";
 
-// function list of breweries section
+  const headerEl = document.createElement("header");
+  headerEl.setAttribute("class", "search-bar");
 
-// const h1TitleEl = documemt.createElement("h1")
-// h1TitleEl.innerText = "List of Breweries"
+  const searchFormEl = document.createElement("form");
+  searchFormEl.setAttribute("id", "search-breweries-form");
+  searchFormEl.setAttribute("autocomplete", "off");
 
-// const headerEl = document.createElement("header")
-// headerEl.setAttribute("class", "search-bar")
+  const searchLabelEl = document.createElement("label");
+  searchLabelEl.setAttribute("for", "search-breweries");
 
-// const searchFormEl = document.createElement("form")
-// searchFormEl.setAttribute("id", "search-breweries-form")
-// searchFormEl.setAttribute("autocomplete", "off")
+  const h2El = document.createElement("h2");
+  h2El.innerText = "Search breweries:";
 
-// const searchLabelEl = document.createElement("label")
-// searchLabelEl.setAttribute("for", "search-breweries")
+  const searchInputEl = document.createElement("input");
+  searchInputEl.setAttribute("id", "search-breweries");
+  searchInputEl.setAttribute("name", "search-breweries");
+  searchInputEl.setAttribute("type", "text");
 
-// const h2El = document.createElement("h2")
-// h2El.innerText = "Search breweries:"
+  searchLabelEl.append(h2El);
+  searchFormEl.append(searchLabelEl, searchInputEl);
+  headerEl.append(searchFormEl);
 
-// const searchInputEl = document.createElement("input")
-// searchInputEl.setAttribute("id", "search-breweries")
-// searchInputEl.setAttribute("name", "search-breweries")
-// searchInputEl.setAttribute("type", "text")
+  return headerEl;
+}
 
 // const articleEl = document.createElement("article")
 
@@ -202,8 +202,7 @@ const filterByCityForm = renderFilterByCityForm();
 
 // const h2El
 
-{
-  /* <h1>List of Breweries</h1>
+/* <h1>List of Breweries</h1>
 <header class="search-bar">
   <form id="search-breweries-form" autocomplete="off">
     <label for="search-breweries"><h2>Search breweries:</h2></label>
@@ -231,8 +230,13 @@ const filterByCityForm = renderFilterByCityForm();
     // More list elements
   </ul>
 </article> */
-}
 
 // calling functions
+
+const filterByTypeForm = renderFilterByTypeForm();
+const filterByCity = renderFilterByCity();
+const filterByCityForm = renderFilterByCityForm();
+
+// const filterByBrewery = renderOfBreweriesSection()
 
 renderFilterSection();
