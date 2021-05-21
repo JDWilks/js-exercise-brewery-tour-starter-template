@@ -69,7 +69,6 @@ function listenToSelectStateFrom() {
   const formEl = document.querySelector("#select-state-form");
   formEl.addEventListener("submit", function (event) {
     event.preventDefault();
-    console.log("you submitted a state!");
 
     const USState = formEl["select-state"].value;
     console.log("USState", USState);
@@ -82,20 +81,22 @@ function listenToSelectStateFrom() {
           brewery.brewery_type === "regional"
         );
       });
-      console.log(filteredBreweries);
+      console.log("from listentoSelectStateForm :", filteredBreweries);
 
-      const slicedBreweries = filteredBreweries.slice(0, 10);
-      state.breweries = slicedBreweries;
-      console.log(slicedBreweries);
+      state.breweries = filteredBreweries;
+
+      clearAndRenderMain();
     });
   });
 }
+
+// const slicedBreweries = filteredBreweries.slice(0, 10);
 
 /// we start again here making the form dynamic and rendering brewery list on the page
 
 const mainBody = document.querySelector(".main-body");
 
-function renderFilterSection() {
+function renderFilterBySection() {
   const asideEl = document.createElement("aside");
   asideEl.setAttribute("class", "filters-section");
   mainBody.append(asideEl);
@@ -106,7 +107,7 @@ function renderFilterSection() {
   asideEl.append(h2El, filterByTypeForm, filterByCity, filterByCityForm);
 }
 
-function renderFilterByTypeForm() {
+function renderDropDownMenuSelect() {
   const formEl = document.createElement("form");
   formEl.setAttribute("id", "filter-by-type-form");
   formEl.setAttribute("autocompete", "off");
@@ -146,7 +147,7 @@ function renderFilterByTypeForm() {
   return formEl;
 }
 
-function renderFilterByCity() {
+function renderFilterByCityHeader() {
   const divEl = document.createElement("div");
   divEl.setAttribute("class", "filter-by-city-heading");
 
@@ -164,7 +165,7 @@ function renderFilterByCity() {
   return divEl;
 }
 
-function renderFilterByCityForm() {
+function renderFilterByCityCheckBoxes() {
   const formEl = document.createElement("form");
   formEl.setAttribute("id", "filter-by-city-form");
 
@@ -215,20 +216,15 @@ function renderHeaderSearchBar() {
   return headerEl;
 }
 
-function renderBreweriesList() {
-  const articleEl = document.createElement("article");
-
-  const breweriesListUlEl = document.createElement("ul");
-  breweriesListUlEl.setAttribute("class", "breweries-list");
-
+function renderBreweriesListItem(brewery) {
   const breweryLiEL = document.createElement("li");
 
   const h2El = document.createElement("h2");
-  h2El.innerText = "Snow Belt Brew";
+  h2El.innerText = brewery.name;
 
   const typeDiv = document.createElement("div");
   typeDiv.setAttribute("class", "type");
-  typeDiv.innerText = "micro";
+  typeDiv.innerText = brewery.brewery_type;
 
   function renderAddressSection() {
     const addressSect = document.createElement("section");
@@ -238,15 +234,15 @@ function renderBreweriesList() {
     h3El.innerText = "Address:";
 
     const pAdd1El = document.createElement("p");
-    pAdd1El.innerHTML = "9511 Kile Rd";
+    pAdd1El.innerHTML = brewery.street;
 
     const pAdd2El = document.createElement("p");
     // pAdd2El.setAttribute("class", "strong");
-    pAdd2El.innerHTML = "Chardon, 44024";
+    (pAdd2El.innerHTML = brewery.address_2),
+      brewery.address_3,
+      brewery.postal_code;
 
     addressSect.append(h3El, pAdd1El, pAdd2El);
-
-    // console.log("within renderAddressSection", addressSect);
 
     return addressSect;
   }
@@ -257,11 +253,10 @@ function renderBreweriesList() {
     const h3El = document.createElement("h3");
     h3El.innerText = "phone:";
     const pEl = document.createElement("p");
-    pEl.innerText = "N/A";
+    pEl.innerText = brewery.phone;
 
     phoneSectEl.append(h3El, pEl);
 
-    // console.log("within renderPhoneSection: ", phoneSectEl);
     return phoneSectEl;
   }
 
@@ -269,13 +264,12 @@ function renderBreweriesList() {
     const linkSectEl = document.createElement("section");
     linkSectEl.setAttribute("class", "link");
     const hrefEl = document.createElement("a");
-    hrefEl.setAttribute("href", "null");
+    hrefEl.setAttribute("href", brewery.website_url);
     hrefEl.setAttribute("target", "blank");
     hrefEl.innerText = "Visit Website";
 
     linkSectEl.append(hrefEl);
 
-    // console.log("within renderLinkSection:", linkSectEl);
     return linkSectEl;
   }
 
@@ -286,30 +280,46 @@ function renderBreweriesList() {
   // console.log(headerSearchbar);
 
   breweryLiEL.append(h2El, typeDiv, addressSection, phoneSection, linkSection);
-  breweriesListUlEl.append(breweryLiEL);
-  articleEl.append(breweriesListUlEl);
-
-  mainBody.append(h1TitleEl, headerSearchbar, articleEl);
 
   renderAddressSection();
   renderPhoneSection();
   renderLinkSection();
 
-  // console.log("within renderBreweriesList :", articleEl);
+  return breweryLiEL;
+}
 
-  return articleEl;
+function renderAllBreweriesList() {
+  const articleEl = document.createElement("article");
+
+  const breweriesListUlEl = document.createElement("ul");
+  breweriesListUlEl.setAttribute("class", "breweries-list");
+
+  mainBody.append(h1TitleEl, headerSearchbar, articleEl);
+  articleEl.append(breweriesListUlEl);
+
+  for (const brewery of state.breweries) {
+    const liEl = renderBreweriesListItem(brewery);
+    console.log("for loop:", brewery);
+    breweriesListUlEl.append(liEl);
+  }
+}
+
+function clearAndRenderMain() {
+  mainBody.innerHTML = "";
+  renderFilterBySection();
+  renderAllBreweriesList();
 }
 
 // calling functions
 
-const filterByTypeForm = renderFilterByTypeForm();
-const filterByCity = renderFilterByCity();
-const filterByCityForm = renderFilterByCityForm();
+const filterByTypeForm = renderDropDownMenuSelect();
+const filterByCity = renderFilterByCityHeader();
+const filterByCityForm = renderFilterByCityCheckBoxes();
 
 const headerSearchbar = renderHeaderSearchBar();
 
-renderBreweriesList();
+// renderBreweriesListItem();
 
-renderFilterSection();
+renderFilterBySection();
 
 listenToSelectStateFrom();
