@@ -1,55 +1,9 @@
-// - Think about which request type to use
-// - Create a state object ✅
-// - Create action functions that update state
-// - Create render functions that read from state
-// - Create a fetch function to get data
-
-// - A user can enter a US state and view a list of breweries in that state
-//     - The list has a maximum of 10 breweries in it
-//     - The list has three types of breweries that offer brewery tours:
-//         - Micro
-//         - Regional
-//         - Brewpub
-//     - Do not show the other types of breweries
-// - From the list of breweries, a user can view the following details about each brewery:
-//     - Name
-//     - Type of brewery
-//     - Address
-//     - Phone Number
-// - From the list of breweries, a user can visit the website of a brewery
-// - From the 'filter by type of brewery' section, a user can filter by type of brewery
-// - From the 'filter by city' section, a user can filter by city, the location of the brewery
-// - From the 'filter by city' section, a user can clear all filters
-// - From the 'search' section, a user can search for breweries by:
-//     - Name
-//     - City
-
-// const state = {
-//   breweries: [
-//     {
-//       address_2: null,
-//       address_3: null,
-//       brewery_type: "large",
-//       city: "San Diego",
-//       country: "United States",
-//       county_province: null,
-//       created_at: "2018-07-24T00:00:00.000Z",
-//       id: 8041,
-//       latitude: "32.714813",
-//       longitude: "-117.129593",
-//       name: "10 Barrel Brewing Co",
-//       obdb_id: "10-barrel-brewing-co-san-diego",
-//       phone: "6195782311",
-//       postal_code: "92101-6618",
-//       state: "California",
-//       street: "1501 E St",
-//       updated_at: "2018-08-23T00:00:00.000Z",
-//       website_url: "http://10barrel.com",
-//     },
-//   ],
-
 const state = {
   breweries: [],
+  filters: {
+    type: "",
+    cities: [],
+  },
 };
 
 function getBreweriesByState(state) {
@@ -141,6 +95,18 @@ function renderDropDownMenuSelect() {
   formEl.append(labelEl, selectEl);
   selectEl.append(optionEl, option1, option2, option3);
   labelEl.append(h3El);
+
+  // we want to change the article (breweries) to be 1 of 4 things (none, micro, regional, brewpub) which is chosen from drop down menu.
+  // event listener - change to be used.
+  // that updates the state.
+  // value of select needs to populate state with that value filter.
+  // "Mirco" value if selected needs to look at all breweries.brewery_type and filter them.
+  // then that creates a new copy of the filtered breweries to be rendered on the page.
+
+  selectEl.addEventListener("change", function () {
+    console.log("you are a winner");
+    //  run state and render artcle
+  });
 
   // console.log("within renderFilterByTypeForm: ", formEl);
 
@@ -315,10 +281,7 @@ function clearAndRenderMain() {
 const filterByTypeForm = renderDropDownMenuSelect();
 const filterByCity = renderFilterByCityHeader();
 const filterByCityForm = renderFilterByCityCheckBoxes();
-
 const headerSearchbar = renderHeaderSearchBar();
-
-// renderBreweriesListItem();
 
 renderFilterBySection();
 
