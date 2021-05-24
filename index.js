@@ -50,15 +50,23 @@ function listenToSelectStateFrom() {
 
 const mainBody = document.querySelector(".main-body");
 
+// input: nothing
+// action: create and append the filter section
+// output: nothing
 function renderFilterBySection() {
   const asideEl = document.createElement("aside");
   asideEl.setAttribute("class", "filters-section");
-  mainBody.append(asideEl);
 
   const h2El = document.createElement("h2");
   h2El.innerText = "Filter By:";
 
+  const filterByTypeForm = renderDropDownMenuSelect();
+  const filterByCity = renderFilterByCityHeader();
+  const filterByCityForm = renderFilterByCityCheckBoxes();
+
   asideEl.append(h2El, filterByTypeForm, filterByCity, filterByCityForm);
+
+  mainBody.append(asideEl);
 }
 
 function renderDropDownMenuSelect() {
@@ -113,6 +121,9 @@ function renderDropDownMenuSelect() {
   return formEl;
 }
 
+// input: nothing
+// action: create a city header element
+// output: the city header element
 function renderFilterByCityHeader() {
   const divEl = document.createElement("div");
   divEl.setAttribute("class", "filter-by-city-heading");
@@ -131,25 +142,63 @@ function renderFilterByCityHeader() {
   return divEl;
 }
 
+// OLD
+// function renderFilterByCityCheckBoxes() {
+//   const formEl = document.createElement("form");
+//   formEl.setAttribute("id", "filter-by-city-form");
+
+//   const inputCityCheckbox = document.createElement("input");
+//   inputCityCheckbox.setAttribute("type", "checkbox");
+//   inputCityCheckbox.setAttribute("name", "chardon");
+//   inputCityCheckbox.setAttribute("value", "chardon");
+
+//   const inputCityLabel = document.createElement("label");
+//   inputCityLabel.setAttribute("for", "Chardon");
+//   inputCityLabel.innerText = "Chardon";
+
+//   formEl.append(inputCityCheckbox, inputCityLabel);
+
+//   // console.log("within renderFilterByCityForm :", formEl);
+
+//   return formEl;
+// }
+
+// ------------------here
 function renderFilterByCityCheckBoxes() {
   const formEl = document.createElement("form");
   formEl.setAttribute("id", "filter-by-city-form");
+  // Nico was here...
+  const cities = state.breweries.map(function (brewery) {
+    return brewery.city;
+  });
 
-  const inputCityCheckbox = document.createElement("input");
-  inputCityCheckbox.setAttribute("type", "checkbox");
-  inputCityCheckbox.setAttribute("name", "chardon");
-  inputCityCheckbox.setAttribute("value", "chardon");
+  // this produces an object and sorts it
+  let setOfCities = new Set(cities);
+  // This makes a new array
+  arrayOfCities = [...setOfCities];
+  arrayOfCities.sort();
 
-  const inputCityLabel = document.createElement("label");
-  inputCityLabel.setAttribute("for", "Chardon");
-  inputCityLabel.innerText = "Chardon";
+  for (const city of arrayOfCities) {
+    const inputCityCheckbox = document.createElement("input");
+    inputCityCheckbox.setAttribute("type", "checkbox");
+    inputCityCheckbox.setAttribute("name", city);
+    inputCityCheckbox.setAttribute("value", city);
 
-  formEl.append(inputCityCheckbox, inputCityLabel);
+    const inputCityLabel = document.createElement("label");
+    inputCityLabel.setAttribute("for", city);
+    inputCityLabel.innerText = city;
 
-  // console.log("within renderFilterByCityForm :", formEl);
+    formEl.append(inputCityCheckbox, inputCityLabel);
+  }
+
+  console.log("form:", formEl);
+  // console.log("checking main:", asideEl);
+  console.log("checking main:", mainBody);
 
   return formEl;
 }
+
+// -----------------to here
 
 const h1TitleEl = document.createElement("h1");
 h1TitleEl.innerText = "List of Breweries";
@@ -254,11 +303,14 @@ function renderBreweriesListItem(brewery) {
   return breweryLiEL;
 }
 
+// dependencies:
 function renderAllBreweriesList() {
   const articleEl = document.createElement("article");
 
   const breweriesListUlEl = document.createElement("ul");
   breweriesListUlEl.setAttribute("class", "breweries-list");
+
+  const headerSearchbar = renderHeaderSearchBar();
 
   mainBody.append(h1TitleEl, headerSearchbar, articleEl);
   articleEl.append(breweriesListUlEl);
@@ -272,17 +324,11 @@ function renderAllBreweriesList() {
 
 function clearAndRenderMain() {
   mainBody.innerHTML = "";
+
   renderFilterBySection();
   renderAllBreweriesList();
+  listenToSelectStateFrom();
+  console.log("render counter 313");
 }
 
-// calling functions
-
-const filterByTypeForm = renderDropDownMenuSelect();
-const filterByCity = renderFilterByCityHeader();
-const filterByCityForm = renderFilterByCityCheckBoxes();
-const headerSearchbar = renderHeaderSearchBar();
-
-renderFilterBySection();
-
-listenToSelectStateFrom();
+clearAndRenderMain();
